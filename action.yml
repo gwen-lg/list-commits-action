@@ -7,6 +7,6 @@ inputs: {}
 outputs:
   commits:
     description: List of commits sha
+    value: ${{ steps.cargo-run.outputs.commits }}
 runs:
-  using: docker
-  image: ./Dockerfile
+  using: composite
