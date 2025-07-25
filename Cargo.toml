@@ -1,0 +1,12 @@
+[package]
+name = "list_commits_action"
+description = "Generate the list of commits from an event (push or PR)"
+version = "0.16.3"
+
+edition = "2021"
+
+[dependencies]
+ghactions = { version = "^0.9", features = ["generate", "octocrab"] }
+anyhow = "1"
+log = "0.4"
+tokio = { version = "^1.38", features = ["full"] }
