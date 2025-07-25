@@ -6,7 +6,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-ghactions = { version = "^0.9", features = ["generate"] }
+ghactions = { version = "0.16", features = ["generate"] }
 anyhow = "1"
 log = "0.4"
 serde_json = "1.0"
