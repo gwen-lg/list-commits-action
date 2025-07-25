@@ -789,6 +789,7 @@ dependencies = [
  "anyhow",
  "ghactions",
  "log",
+ "serde_json",
 ]
 
 [[package]]
