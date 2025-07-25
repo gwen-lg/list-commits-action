@@ -4,7 +4,9 @@
 name: List Commits
 description: Generate the list of commits from an event (push or PR)
 inputs: {}
-outputs: {}
+outputs:
+  commits:
+    description: List of commits sha
 runs:
   using: docker
   image: ./Dockerfile

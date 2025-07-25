@@ -8,5 +8,17 @@ use ghactions::prelude::*;
     image = "./Dockerfile"
 )]
 pub struct ListCommitsAction {
-    // Inputs & Outputs go here
+    #[output(
+        // Output Description
+        description = "List of commits sha",
+    )]
+    commits: String,
+}
+
+impl ListCommitsAction {
+    pub fn set_commits_list(&mut self, commits: Vec<String>) -> Result<(), serde_json::Error> {
+        let commits = serde_json::to_string(&commits)?;
+        self.set_commits(commits);
+        Ok(())
+    }
 }
