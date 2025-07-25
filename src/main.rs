@@ -5,12 +5,9 @@ use log::info;
 
 mod action;
 
-#[tokio::main]
-async fn main() -> Result<()> {
+fn main() -> Result<()> {
     let action = action::ListCommitsAction::init()?;
     info!("Starting action: {}", action.name());
-
-    let octocrab = action.octocrab()?;
 
     // Your code goes here
 
