@@ -32,3 +32,10 @@ jobs:
       - name: "Cargo clippy"
         if: $${{ always() }}
         run: cargo clippy --profile=test --locked
+
+  typos:
+    name: "Typos : Check spelling of entire workspace"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: crate-ci/typos@master
