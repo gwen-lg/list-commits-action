@@ -1,6 +1,7 @@
+use fallible_iterator::{FallibleIterator, convert};
 use ghactions::prelude::*;
 
-use anyhow::{anyhow, bail, Context, Result};
+use anyhow::{Context, Result, anyhow, bail};
 use log::info;
 use serde_json::Value;
 
@@ -31,10 +32,18 @@ fn main() -> Result<()> {
         .ok_or_else(|| anyhow!("failed to get `commits` from push event"))?;
 
     let commits = if let Value::Array(commits) = commits {
-        commits
-            .iter()
-            .map(|commit_obj| commit_obj.get("sha").unwrap().as_str().unwrap().to_string())
-            .collect::<Vec<_>>()
+        convert(commits.iter().map(|commit_obj| {
+            commit_obj
+                .get("id")
+                .ok_or_else(|| anyhow!("Can't get `id` element (commit sha) in :\n{commit_obj:#?}"))
+        }))
+        .map(|commit_sha| {
+            commit_sha
+                .as_str()
+                .ok_or_else(|| anyhow!("failed to convert {commit_sha:#?}"))
+                .map(|std| std.to_string())
+        })
+        .collect::<Vec<_>>()?
     } else {
         bail!("commits are not an array")
     };
