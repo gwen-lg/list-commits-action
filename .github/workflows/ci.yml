@@ -1,0 +1,17 @@
+name: CI Checks
+
+on:
+  push:
+    branches-ignore: ["wip*"]
+  pull_request:
+
+jobs:
+  check-conventional-commits:
+    name: Check Conventional Commits
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: webiny/action-conventional-commits@v1.3.0
