@@ -15,3 +15,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: webiny/action-conventional-commits@v1.3.0
+
+  code-checks:
+    name: Check code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          components: clippy, rustfmt
+      - uses: actions/checkout@v4
+
+      - name: "Cargo formatting"
+        if: $${{ always() }}
+        run: cargo fmt --all -- --check
+
+      - name: "Cargo clippy"
+        if: $${{ always() }}
+        run: cargo clippy --profile=test --locked
