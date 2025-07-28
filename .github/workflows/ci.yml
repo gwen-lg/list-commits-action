@@ -39,3 +39,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: crate-ci/typos@master
+
+  toml:
+    name: "Check toml formatting"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gwen-lg/taplo-action@v1
+        with:
+          format: true
+          lint: false
