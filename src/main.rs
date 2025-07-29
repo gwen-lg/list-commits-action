@@ -1,3 +1,5 @@
+use std::env::{self, VarError};
+
 use action::ListCommitsAction;
 use fallible_iterator::{FallibleIterator, convert};
 use ghactions::prelude::*;
@@ -16,7 +18,10 @@ fn main() -> Result<()> {
     info!("Started from `{github_event_name}`");
 
     let github_event = get_event()?;
-    info!("GitHub Event : {github_event:#?}");
+    //info!("GitHub Event : {github_event:#?}");
+
+    //Debug env :
+    debug_github_env();
 
     let commits = if github_event_name == "push" {
         push_commits(&github_event_name, &github_event)
@@ -101,4 +106,54 @@ fn get_event() -> Result<serde_json::Value> {
         serde_json::from_str(&event_content).context("Deserialise github event json")?;
 
     Ok(root)
+}
+
+fn debug_env_var(var: &str) {
+    match env::var(var) {
+        Ok(value) => info!("{var}: {value}"),
+        Err(VarError::NotPresent) => warn!("{var} is not present"),
+        Err(VarError::NotUnicode(_)) => warn!("{var} have not unicode value"),
+    }
+}
+fn debug_github_env() {
+    // GITHUB_JOB
+    debug_env_var("GITHUB_REF");
+    debug_env_var("GITHUB_SHA");
+    // GITHUB_REPOSITORY
+    // GITHUB_REPOSITORY_OWNER
+    // GITHUB_REPOSITORY_OWNER_ID
+    // GITHUB_RUN_ID
+    // GITHUB_RUN_NUMBER
+    // GITHUB_RETENTION_DAYS
+    // GITHUB_RUN_ATTEMPT
+    // GITHUB_ACTOR_ID
+    // GITHUB_ACTOR
+    // GITHUB_WORKFLOW
+    debug_env_var("GITHUB_HEAD_REF");
+    debug_env_var("GITHUB_BASE_REF");
+    // GITHUB_EVENT_NAME
+    // GITHUB_SERVER_URL
+    // GITHUB_API_URL
+    // GITHUB_GRAPHQL_URL
+    debug_env_var("GITHUB_REF_NAME");
+    // GITHUB_REF_PROTECTED
+    debug_env_var("GITHUB_REF_TYPE");
+    // GITHUB_WORKFLOW_REF
+    // GITHUB_WORKFLOW_SHA
+    // GITHUB_REPOSITORY_ID
+    // GITHUB_TRIGGERING_ACTOR
+    // GITHUB_WORKSPACE
+    // GITHUB_ACTION
+    debug_env_var("GITHUB_EVENT_PATH");
+    // GITHUB_ACTION_REPOSITORY
+    // GITHUB_ACTION_REF
+    // GITHUB_PATH
+    debug_env_var("GITHUB_ENV");
+    // GITHUB_STEP_SUMMARY
+    // GITHUB_STATE
+    debug_env_var("GITHUB_OUTPUT");
+    // RUNNER_OS
+    // RUNNER_ARCH
+    // RUNNER_NAME
+    // RUNNER_ENVIRONMENT"
 }
