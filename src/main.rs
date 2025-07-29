@@ -21,7 +21,7 @@ fn main() -> Result<()> {
     let commits = if github_event_name == "push" {
         push_commits(&github_event_name, &github_event)
     } else if github_event_name == "pull_request" {
-        pul_request_commits(github_event)
+        pull_request_commits(github_event)
     } else {
         Err(anyhow!("Event `{github_event_name}` is not handle"))
     }?;
@@ -34,7 +34,7 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn pul_request_commits(github_event: Value) -> Result<Vec<String>, Error> {
+fn pull_request_commits(github_event: Value) -> Result<Vec<String>, Error> {
     let base_obj = github_event
         .get("base")
         .ok_or_else(|| anyhow!("failed to get `base` value from `pull_request` event"))?;
