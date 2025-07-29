@@ -119,6 +119,7 @@ checksum = "0f68dc7a71e33c832be0ebe1877c34dcb96fb5b91639d965816af2e1212adc1b"
 dependencies = [
  "ghactions-core",
  "ghactions-derive",
+ "log",
 ]
 
 [[package]]
@@ -143,6 +144,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c03f8d3a2b8e9d88e50120010988da06c06e159adf9b961373b662b8dd653b9a"
 dependencies = [
  "ghactions-core",
+ "log",
  "proc-macro2",
  "quote",
  "syn",

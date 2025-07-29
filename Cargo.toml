@@ -8,6 +8,7 @@ edition = "2024"
 [dependencies]
 ghactions = { version = "0.16", default-features = false, features = [
     "generate",
+    "log",
 ] }
 anyhow = "1"
 log = "0.4"
