@@ -1,8 +1,9 @@
+use action::ListCommitsAction;
 use fallible_iterator::{FallibleIterator, convert};
 use ghactions::prelude::*;
 
-use anyhow::{Context, Result, anyhow, bail};
-use log::info;
+use anyhow::{Context, Error, Result, anyhow, bail};
+use log::{debug, info};
 use serde_json::Value;
 
 mod action;
@@ -16,21 +17,60 @@ fn main() -> Result<()> {
 
     let github_event = get_event()?;
 
+    let commits = if github_event_name == "push" {
+        push_commits(&github_event_name, &github_event)
+    } else if github_event_name == "pull_request" {
+        pul_request_commits(github_event)
+    } else {
+        Err(anyhow!("Event `{github_event_name}` is not handle"))
+    }?;
+
+    // Your code goes here
+    action
+        .set_commits_list(commits)
+        .context("set commits list output")?;
+
+    Ok(())
+}
+
+fn pul_request_commits(github_event: Value) -> Result<Vec<String>, Error> {
+    let base_obj = github_event
+        .get("base")
+        .ok_or_else(|| anyhow!("failed to get `base` value from `pull_request` event"))?;
+    let base_ref = base_obj
+        .get("ref")
+        .ok_or_else(|| anyhow!("failed to get `ref` in base object"))?;
+    let base_sha = base_obj
+        .get("sha")
+        .ok_or_else(|| anyhow!("failed to get `ref` in base object"))?
+        .to_string();
+    let head_obj = github_event
+        .get("head")
+        .ok_or_else(|| anyhow!("failed to get `base` value from `pull_request` event"))?;
+    let head_ref = head_obj
+        .get("ref")
+        .ok_or_else(|| anyhow!("failed to get `ref` in head object"))?;
+    let head_sha = head_obj
+        .get("sha")
+        .ok_or_else(|| anyhow!("failed to get `ref` in head object"))?
+        .to_string();
+    debug!("Pull request with base `{base_ref}` and head `{head_ref}`");
+    let commits = vec![head_sha, base_sha];
+    Ok(commits)
+}
+
+fn push_commits(github_event_name: &String, github_event: &Value) -> Result<Vec<String>, Error> {
     let base_ref = github_event
         .get("base_ref")
-        .ok_or_else(|| anyhow!("failed to get `base_ref` value from push event"))?;
+        .ok_or_else(|| anyhow!("failed to get `base_ref` value from {github_event_name} event"))?;
     info!("base_ref={base_ref}");
-
-    info!("Started from `{github_event_name}`");
     let before = github_event
         .get("before")
-        .ok_or_else(|| anyhow!("failed to get `before` value from push event"))?;
+        .ok_or_else(|| anyhow!("failed to get `before` value from {github_event_name} event"))?;
     info!("before={before}");
-
     let commits = github_event
         .get("commits")
-        .ok_or_else(|| anyhow!("failed to get `commits` from push event"))?;
-
+        .ok_or_else(|| anyhow!("failed to get `commits` from {github_event_name} event"))?;
     let commits = if let Value::Array(commits) = commits {
         convert(commits.iter().map(|commit_obj| {
             commit_obj
@@ -47,13 +87,7 @@ fn main() -> Result<()> {
     } else {
         bail!("commits are not an array")
     };
-
-    // Your code goes here
-    action
-        .set_commits_list(commits)
-        .context("set commits list output")?;
-
-    Ok(())
+    Ok(commits)
 }
 
 fn get_event() -> Result<serde_json::Value> {
