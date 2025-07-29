@@ -40,7 +40,11 @@ fn main() -> Result<()> {
 }
 
 fn pull_request_commits(github_event: Value) -> Result<Vec<String>, Error> {
-    let base_obj = github_event
+    let pr_obj = github_event.get("pull_request").ok_or_else(|| {
+        anyhow!("failed to get `pull_request` object value from `pull_request` event")
+    })?;
+
+    let base_obj = pr_obj
         .get("base")
         .ok_or_else(|| anyhow!("failed to get `base` value from `pull_request` event"))?;
     let base_ref = base_obj
@@ -50,7 +54,7 @@ fn pull_request_commits(github_event: Value) -> Result<Vec<String>, Error> {
         .get("sha")
         .ok_or_else(|| anyhow!("failed to get `sha` in base object"))?
         .to_string();
-    let head_obj = github_event
+    let head_obj = pr_obj
         .get("head")
         .ok_or_else(|| anyhow!("failed to get `base` value from `pull_request` event"))?;
     let head_ref = head_obj
