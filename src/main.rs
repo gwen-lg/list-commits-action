@@ -9,13 +9,14 @@ use serde_json::Value;
 mod action;
 
 fn main() -> Result<()> {
-    let mut action = action::ListCommitsAction::init()?;
+    let mut action = ListCommitsAction::init()?;
     info!("Starting action: {}", action.name());
 
     let github_event_name = action.get_event_name()?;
     info!("Started from `{github_event_name}`");
 
     let github_event = get_event()?;
+    info!("GitHub Event : {github_event:#?}");
 
     let commits = if github_event_name == "push" {
         push_commits(&github_event_name, &github_event)
@@ -42,7 +43,7 @@ fn pul_request_commits(github_event: Value) -> Result<Vec<String>, Error> {
         .ok_or_else(|| anyhow!("failed to get `ref` in base object"))?;
     let base_sha = base_obj
         .get("sha")
-        .ok_or_else(|| anyhow!("failed to get `ref` in base object"))?
+        .ok_or_else(|| anyhow!("failed to get `sha` in base object"))?
         .to_string();
     let head_obj = github_event
         .get("head")
@@ -52,7 +53,7 @@ fn pul_request_commits(github_event: Value) -> Result<Vec<String>, Error> {
         .ok_or_else(|| anyhow!("failed to get `ref` in head object"))?;
     let head_sha = head_obj
         .get("sha")
-        .ok_or_else(|| anyhow!("failed to get `ref` in head object"))?
+        .ok_or_else(|| anyhow!("failed to get `sha` in head object"))?
         .to_string();
     debug!("Pull request with base `{base_ref}` and head `{head_ref}`");
     let commits = vec![head_sha, base_sha];
