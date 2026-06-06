@@ -4,7 +4,7 @@ set -euo pipefail
 
 # Function to list commits for push events
 list_push_commits() {
-    echo "commits=$(cat ${GITHUB_EVENT_PATH} | jq -r -c ".commits | map({id: .id, message: .message})")" >> "$GITHUB_OUTPUT"
+    echo "commits=$(cat ${GITHUB_EVENT_PATH} | jq -r -c ".commits | map({id: .id, message: (.message | split(\"\\n\") | .[0])})")" >> "$GITHUB_OUTPUT"
 }
 
 # Function to list commits for pull_request events
