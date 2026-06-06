@@ -14,6 +14,7 @@ This project adheres to [Conventional Commits](https://www.conventionalcommits.o
 ### ⟳ Continuous Integration
 
 - add dependabot with github-actions
+- add workflow with conventional commit
 
 ### ⚙️ Miscellaneous Tasks
 
