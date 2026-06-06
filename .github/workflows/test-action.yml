@@ -21,7 +21,7 @@ jobs:
       - name: Debug Output
         run: |
           echo "Commits found: ${{ steps.list_commits.outputs.commits }}"
-          echo "Number of commits: ${{ length(fromJson(steps.list_commits.outputs.commits)) }}"
+          echo "Number of commits: $(jq length \"${{ fromJson(steps.list_commits.outputs.commits) }}\")"
 
   process-commits:
     needs: test-action

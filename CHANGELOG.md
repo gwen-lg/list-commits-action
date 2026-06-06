@@ -16,6 +16,7 @@ This project adheres to [Conventional Commits](https://www.conventionalcommits.o
 ### 🐛 Bug Fixes
 
 - compute number of commits in test-action
+- compute number of commits in test-action
 
 ### ⟳ Continuous Integration
 
