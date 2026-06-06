@@ -16,7 +16,17 @@ jobs:
       commits: ${{ steps.list-commits.outputs.commits }}
     steps:
       - uses: actions/checkout@v6
-      - uses: gwenlg/commit-list-action@v1
+      - uses: gwen-lg/list-commits-action@v1
+
+  process-commits:
+    needs: list-commits
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        commit: ${{ fromJson(needs.test-action.outputs.commits) }}
+    steps:
+      - name: Process Commit
+        run: echo "Processing commit: ${{ matrix.commit.id }}"
 ```
 
 ## Outputs
