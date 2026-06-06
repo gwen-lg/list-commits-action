@@ -11,6 +11,10 @@ This project adheres to [Conventional Commits](https://www.conventionalcommits.o
 - add action.yml with management of push event
 - add pull_request event management
 
+### ⟳ Continuous Integration
+
+- add workflow with conventional commit
+
 ### ⚙️ Miscellaneous Tasks
 
 - empty root commit
