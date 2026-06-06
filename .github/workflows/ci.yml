@@ -13,3 +13,20 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: webiny/action-conventional-commits@v1.4.2
+
+  check-changelog:
+    name: "Check: ${{ matrix.commit.message }}"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Generate Changelog
+        id: generate-changelog
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+        env:
+          OUTPUT: CHANGELOG_UP.md
+          GITHUB_REPO: ${{ github.repository }}
+      - name: Check Changelog
+        id: check-changelog
+        run: diff CHANGELOG.md CHANGELOG_UP.md
