@@ -6,6 +6,10 @@ This project adheres to [Conventional Commits](https://www.conventionalcommits.o
 
 ## [unreleased]
 
+### ⟳ Continuous Integration
+
+- add dependabot with github-actions
+
 ### ⚙️ Miscellaneous Tasks
 
 - setup repo license to MIT
