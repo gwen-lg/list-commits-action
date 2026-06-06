@@ -22,6 +22,7 @@ This project adheres to [Conventional Commits](https://www.conventionalcommits.o
 - add workflow with conventional commit
 - add check of CHANGELOG.md files
 - add dependabot with github-actions
+- add typos check
 
 ### ⚙️ Miscellaneous Tasks
 

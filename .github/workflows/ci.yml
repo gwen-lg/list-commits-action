@@ -32,3 +32,11 @@ jobs:
       - name: Check Changelog
         id: check-changelog
         run: diff -u CHANGELOG.md CHANGELOG_UP.md
+
+  typos_checks:
+    name: Typos check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Check spelling of entire workspace
+        uses: crate-ci/typos@master
