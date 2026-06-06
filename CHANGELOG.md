@@ -6,6 +6,10 @@ This project adheres to [Conventional Commits](https://www.conventionalcommits.o
 
 ## [unreleased]
 
+### 🚀 Features
+
+- add action.yml with management of push event
+
 ### ⚙️ Miscellaneous Tasks
 
 - empty root commit
