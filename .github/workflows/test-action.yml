@@ -1,0 +1,36 @@
+name: Test List Commits Action
+on:
+  push:
+  pull_request:
+
+jobs:
+  test-action:
+    runs-on: ubuntu-latest
+    outputs:
+      commits: ${{ steps.list_commits.outputs.commits }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: List Commits
+        id: list_commits
+        uses: ./. # Use the local action
+
+      - name: Debug Output
+        run: |
+          echo "Commits found: ${{ steps.list_commits.outputs.commits }}"
+          echo "Number of commits: ${{ length(fromJson(steps.list_commits.outputs.commits)) }}"
+
+  process-commits:
+    needs: test-action
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        commit: ${{ fromJson(needs.test-action.outputs.commits) }}
+    steps:
+      - name: Process Commit
+        run: |
+          echo "Processing commit: ${{ matrix.commit.id }}"
+          echo "Commit message: ${{ matrix.commit.message }}"
