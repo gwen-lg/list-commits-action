@@ -18,7 +18,6 @@ fn main() -> Result<()> {
     info!("Started from `{github_event_name}`");
 
     let github_event = get_event()?;
-    //info!("GitHub Event : {github_event:#?}");
 
     //Debug env :
     debug_github_env();
@@ -43,6 +42,7 @@ fn pull_request_commits(github_event: Value) -> Result<Vec<String>, Error> {
     let pr_obj = github_event.get("pull_request").ok_or_else(|| {
         anyhow!("failed to get `pull_request` object value from `pull_request` event")
     })?;
+    //info!("GitHub Event pull_request: {pr_obj:#?}");
 
     let base_obj = pr_obj
         .get("base")
@@ -54,6 +54,7 @@ fn pull_request_commits(github_event: Value) -> Result<Vec<String>, Error> {
         .get("sha")
         .ok_or_else(|| anyhow!("failed to get `sha` in base object"))?
         .to_string();
+
     let head_obj = pr_obj
         .get("head")
         .ok_or_else(|| anyhow!("failed to get `base` value from `pull_request` event"))?;
@@ -146,7 +147,7 @@ fn debug_github_env() {
     // GITHUB_WORKFLOW_SHA
     // GITHUB_REPOSITORY_ID
     // GITHUB_TRIGGERING_ACTOR
-    // GITHUB_WORKSPACE
+    debug_env_var("GITHUB_WORKSPACE");
     // GITHUB_ACTION
     debug_env_var("GITHUB_EVENT_PATH");
     // GITHUB_ACTION_REPOSITORY
