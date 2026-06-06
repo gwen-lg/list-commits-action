@@ -13,6 +13,10 @@ This project adheres to [Conventional Commits](https://www.conventionalcommits.o
 - filter to keep only id and message field of commit
 - trunk commit message at the end of first linge
 
+### 🐛 Bug Fixes
+
+- compute number of commits in test-action
+
 ### ⟳ Continuous Integration
 
 - add dependabot with github-actions
