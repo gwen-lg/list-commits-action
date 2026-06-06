@@ -1,0 +1,25 @@
+name: "list-commits-action"
+author: "Gwen Lg"
+description: "List all commits of an push or pull_request event to allow run check on each commits."
+
+outputs:
+  commits:
+    description: "the list of commits from the event"
+    value: ${{ steps.list_commits.outputs.commits }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+      with:
+        fetch-depth: 0 # ${{ needs.commits-number.outputs.nbcommits }}
+        ref: ${{ github.event.pull_request.head.sha }}
+    - name: "List commits"
+      id: list_commits
+      shell: bash
+      run: $GITHUB_ACTION_PATH/action/list-commits.sh
+
+branding:
+  icon: "list"
+  color: "orange"
