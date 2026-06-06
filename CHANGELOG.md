@@ -14,6 +14,7 @@ This project adheres to [Conventional Commits](https://www.conventionalcommits.o
 ### ⟳ Continuous Integration
 
 - add workflow with conventional commit
+- add check of CHANGELOG.md files
 
 ### ⚙️ Miscellaneous Tasks
 
