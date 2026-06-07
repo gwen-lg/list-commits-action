@@ -33,10 +33,30 @@ jobs:
         id: check-changelog
         run: diff -u CHANGELOG.md CHANGELOG_UP.md
 
-  typos_checks:
-    name: Typos check
+  list-commits:
     runs-on: ubuntu-latest
+    outputs:
+      commits: ${{ steps.list-commits.outputs.commits }}
     steps:
       - uses: actions/checkout@v6
+      - uses: ./.
+        id: list-commits
+
+  typos_checks:
+    needs: list-commits
+    strategy:
+      matrix:
+        commit: ${{ fromJSON(needs.list-commits.outputs.commits) }}
+
+    name: "Typos ${{ matrix.commit.message }}"
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}-${{ matrix.commit.id }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: "${{ matrix.commit.id }}"
       - name: Check spelling of entire workspace
         uses: crate-ci/typos@master
